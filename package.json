@@ -1,0 +1,28 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Projeto Help a Ong",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VitorBassDev/backend_helpong.git"
+  },
+  "author": "Vítor Guedes",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/VitorBassDev/backend_helpong/issues"
+  },
+  "homepage": "https://github.com/VitorBassDev/backend_helpong#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.5"
+  }
+}
