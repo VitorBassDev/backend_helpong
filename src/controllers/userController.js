@@ -1,5 +1,6 @@
 const bcrypt = require ('bcrypt');
 module.exports = {
+
   select_user (request, response) {
   const resposta =  {
     mensagem : "Get_User - Cheguei Aqui"
@@ -9,7 +10,28 @@ module.exports = {
   return response.json(resposta);
   },
 
-  create_user (request, response) {
+  create_user_ong (request, response) {
+    const data =  request.body;
+
+    bcrypt.hash(data.senha, 10,(errBcrypt, hash) => {
+      if(errBcrypt){
+          return res.status(500).json({
+            Mensagem: "Erro na criptografia",
+            error: errBcrypt});
+        }
+        else {
+          const dados = {
+            nome: data.nome,
+            email: data.email,
+            senha: hash,
+          }
+          return response.json({
+            dados,
+          })
+        } 
+    }); 
+  },
+  create_user_doador (request, response) {
     const resposta =  [request.body.nome, request.body.email, request.body.senha]
 
     bcrypt.hash(request.body.senha, 10,(errBcrypt, hash) => {
@@ -22,8 +44,8 @@ module.exports = {
               email: request.body.email,
           }
             return response.send({
-              Informativo: 'Senha Criptografada',
-              dados: dados,
+              Informativo: 'Perfil Doador Senha Criptografada',
+              dados: `Senha`, dados,
               senha: hash
             });
         } 
