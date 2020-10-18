@@ -1,23 +1,15 @@
-const express   = require('express');
-const app = express();
-const http      = require ('http');
-const cors      = require ('cors');
 require('dotenv/config');
 
+const express   = require('express');
+const http      = require ('http');
+const cors      = require ('cors');
+const routes =  require('./router');
+
+const app       = express();
 
 app.use(cors());
 app.use(express.json());
-
-/**
-app.get('/', (request, response)=>{
-  const resposta = {
-    nome: "vitor guedes",
-    idade: 24,
-  };
-  console.log(resposta);
-  return response.json({resposta});
-})
- */
+app.use(routes);
 
 const server = http.createServer(app);
   server.listen(process.env.PORT_BACKEND, () => {
