@@ -1,20 +1,29 @@
-# Nome do produto
-> Descrição curta sobre o que seu projeto faz.
+# BACKEND - HELP A ONG
+> Backend desenvolvido em NodeJS para o projeto de TCC - Help a ONG.
 
 [![NPM Version][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url]
 [![Downloads Stats][npm-downloads]][npm-url]
 
-De um a dois parágrafos sobre o que é seu projeto e o que ele faz.
+_backend em desenvolvimento_
 
-![](../header.png)
+<!-- ![](../header.png) -->
 
-## Instalação
+## Informações
 
-OS X & Linux:
-
+# Banco de Dados:
 ```sh
-npm install my-crazy-module --save
+npm install mysql2 --save
+```
+
+# Query Builder:
+```sh
+npm install knex --save
+```
+
+# Exemplo de Query Builder:
+```sh
+Exemplo: knex('user').where('name', 'vitor').select('*');
 ```
 
 Windows:
