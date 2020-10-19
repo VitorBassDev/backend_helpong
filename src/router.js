@@ -1,5 +1,5 @@
 const express = require('express');
-
+//const connection = require ('../database/connection');
 const rotaUser = require('../src/routers/user');
 const rotaAuth = require('../src/routers/auth');
 const routes = express.Router();
