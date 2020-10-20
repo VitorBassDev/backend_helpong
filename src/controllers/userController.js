@@ -20,37 +20,55 @@ module.exports = {
       email_usuario,
       senha_usuario,
     } = request.body;
-
+    
     const dados = request.body;    
 
-    await bcrypt.hash(request.body.senha_usuario, 10,(errBcrypt, hash) => {
-      if(errBcrypt){
-        return res.status(500).json({
-          error: errBcrypt,
-          Mensagem: "Erro na Senha"
-        });
-      } else {
-        connection.insert({
-          nome_usuario, 
-          email_usuario,
-          senha_usuario: hash,
-          perfil_usuario: 1
-          }).into('tbl_usuario').then(data =>{
-            return response.json({
-              mensagem: 'Usuario Cadastrado com Sucesso',
-                usuarioCriado: {
-                Nome_Usuário: request.body.nome_usuario,    
-                //Senha_Usuário: hash,    
-                }
+    const rows = await connection     
+      .from("tbl_usuario")
+      .select()
+      . where({ 
+        email_usuario: request.body.email_usuario
+        })
+      
+        if(rows.length > 0 ){
+          response.json({
+            mensagem: "email Já cadastrado"
+          });
+          console.log({
+            rows, 
+            mensagem: "Email em uso"});
+        } else {
+          await bcrypt.hash(request.body.senha_usuario, 10,(errBcrypt, hash) => {
+            if(errBcrypt){
+              return response.status(500).json({
+                error: errBcrypt,
+                Mensagem: "Erro na Senha"
               });
-            }).catch(err => {
-                console.log(err);
-                return response.json({
-                  Mensagem: "Erro no Cadastro"
-                });
-              });
+            } else {
+              connection.insert({
+                nome_usuario, 
+                email_usuario,
+                senha_usuario: hash,
+                perfil_usuario: 1
+                }).into('tbl_usuario').then(data =>{
+                  //console.log(resultadoInsert);
+                  return response.json({
+                    mensagem: 'Usuario Cadastrado com Sucesso',  
+                    
+                    Id: result.insertId,
+                    Nome: data.nome_usuario,
+                    Email: data.nome_usuario,
+                    
+                    });
+                  }).catch(err => {
+                      console.log(err);
+                      return response.json({
+                        Mensagem: "Erro no Cadastro"
+                      });
+                    });
+              }
+          });
         }
-    });
   },
 
   async create_user_doador (request, response) {
@@ -59,57 +77,54 @@ module.exports = {
       email_usuario,
       senha_usuario,
     } = request.body;
-
+    
     const dados = request.body;    
 
-    await bcrypt.hash(request.body.senha_usuario, 10,(errBcrypt, hash) => {
-      if(errBcrypt){
-        return res.status(500).json({
-          error: errBcrypt,
-          Mensagem: "Erro na Senha"
-        });
-      } else {
-        connection.insert({
-          nome_usuario, 
-          email_usuario,
-          senha_usuario: hash,
-          perfil_usuario: 2
-          }).into('tbl_usuario').then(data =>{
-            return response.json({
-              mensagem: 'Usuario Cadastrado com Sucesso',
-                usuarioCriado: {
-                Nome_Usuário: request.body.nome_usuario,    
-                //Senha_Usuário: hash,    
-                }
+    const rows = await connection     
+      .from("tbl_usuario")
+      .select()
+      . where({ 
+        email_usuario: request.body.email_usuario
+        })
+      
+        if(rows.length > 0 ){
+          response.json({
+            mensagem: "email Já cadastrado"
+          });
+          console.log({
+            rows, 
+            mensagem: "Email em uso"});
+        } else {
+          await bcrypt.hash(request.body.senha_usuario, 10,(errBcrypt, hash) => {
+            if(errBcrypt){
+              return response.status(500).json({
+                error: errBcrypt,
+                Mensagem: "Erro na Senha"
               });
-            }).catch(err => {
-                console.log(err);
-                return response.json({
-                  Mensagem: "Erro no Cadastro"
-                });
-              });
+            } else {
+              connection.insert({
+                nome_usuario, 
+                email_usuario,
+                senha_usuario: hash,
+                perfil_usuario: 2
+                }).into('tbl_usuario').then(data =>{
+                  //console.log(resultadoInsert);
+                  return response.json({
+                    mensagem: 'Usuario Cadastrado com Sucesso',
+                      //dados: data.nome_usuario,
+                      usuarioCriado: {
+                      Nome_Usuário: request.body.nome_usuario,    
+                      //Senha_Usuário: hash,     
+                      }
+                    });
+                  }).catch(err => {
+                      console.log(err);
+                      return response.json({
+                        Mensagem: "Erro no Cadastro"
+                      });
+                    });
+              }
+          });
         }
-    });
-  },
-
-  create_user_test (request, response) {
-    const resposta =  [request.body.nome, request.body.email, request.body.senha]
-
-    bcrypt.hash(request.body.senha, 10,(errBcrypt, hash) => {
-      if(errBcrypt){
-          return res.status(500).send({error: errBcrypt});
-        }
-        else {
-          const dados ={
-              nome: request.body.nome,
-              email: request.body.email,
-          }
-            return response.send({
-              Informativo: 'Perfil Doador Senha Criptografada',
-              dados: `Senha`, dados,
-              senha: hash
-            });
-        } 
-    }); 
   },
 }
