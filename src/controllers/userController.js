@@ -54,11 +54,9 @@ module.exports = {
                   //console.log(resultadoInsert);
                   return response.json({
                     mensagem: 'Usuario Cadastrado com Sucesso',  
-                    
-                    Id: result.insertId,
+                    //Id: data.insertId,
                     Nome: data.nome_usuario,
                     Email: data.nome_usuario,
-                    
                     });
                   }).catch(err => {
                       console.log(err);
