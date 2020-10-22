@@ -1,9 +1,15 @@
 const express = require ('express');
 const router = express.Router();
 
-const UserController = require('../controllers/authController');
+/**
+ * END POINT - USER AUTH 
+ */ 
+const AuthController = require('../controllersTest/authControllerTest');
 
-router.post('/auth-ong', UserController.auth_ong);
-router.post('/auth-doador', UserController.auth_doador);
+//const AuthController = require('../controllersTest/authControllerTest');
+
+router.post('/auth-ong', AuthController.auth_ong);
+//router.post('/auth-doador', AuthController.auth_doador);
+
 
 module.exports = router;
