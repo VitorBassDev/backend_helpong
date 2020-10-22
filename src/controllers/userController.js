@@ -51,19 +51,17 @@ module.exports = {
                 senha_usuario: hash,
                 perfil_usuario: 1
                 }).into('tbl_usuario').then(data =>{
-                  //console.log(resultadoInsert);
+                  console.log("cadastrou");
                   return response.json({
-                    mensagem: 'Usuario Cadastrado com Sucesso',  
-                    //Id: data.insertId,
-                    Nome: data.nome_usuario,
-                    Email: data.nome_usuario,
-                    });
-                  }).catch(err => {
+                    Mensagem: data,
+                    Email: email_usuario
+                  });
+                    }).catch(err => {
                       console.log(err);
-                      return response.json({
-                        Mensagem: "Erro no Cadastro"
+                        return response.json({
+                          Mensagem: "Erro no Cadastro"
+                        });
                       });
-                    });
               }
           });
         }
@@ -106,14 +104,10 @@ module.exports = {
                 senha_usuario: hash,
                 perfil_usuario: 2
                 }).into('tbl_usuario').then(data =>{
-                  //console.log(resultadoInsert);
-                  return response.json({
-                    mensagem: 'Usuario Cadastrado com Sucesso',
-                      //dados: data.nome_usuario,
-                      usuarioCriado: {
-                      Nome_Usuário: request.body.nome_usuario,    
-                      //Senha_Usuário: hash,     
-                      }
+                  console.log("cadastrou");
+                    return response.json({
+                      Mensagem: data,
+                      Email: email_usuario
                     });
                   }).catch(err => {
                       console.log(err);
