@@ -1,4 +1,4 @@
-//const bcrypt = require ('bcrypt');
+const bcrypt = require ('bcrypt');
 const expres = require('express');
 const connection = require ('../database/connection');
 
@@ -28,17 +28,20 @@ module.exports = {
       cpf
     } = request.body
 
+    const saltRounds = 10;
+    const senhaCrip = await bcrypt.hash(request.body.senha, saltRounds);
+
     try {
+      
       await connection('tbl_usuario').insert({
         nome,
         email,
-        senha,
+        senha: senhaCrip,
         cpf,
         perfil: 1
-      })
-        console.log("Cadastro de ONG")
-        return response.json({ cpf })
-
+      })          
+        console.log(senhaCrip)
+        return response.json({cpf})
     } catch ( error) {
       console.log(error, "Erro no cadastro da ONG")
       return response.json({
@@ -55,12 +58,14 @@ module.exports = {
       cpf
     } = request.body
 
+    const saltRounds = 10;
+    const senhaCrip = await bcrypt.hash(request.body.senha, saltRounds);
   
     try {
       await connection('tbl_usuario').insert({
         nome,
         email,
-        senha,
+        senha: senhaCrip,
         cpf,
         perfil: 2
       })
