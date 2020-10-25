@@ -21,20 +21,40 @@ module.exports = {
     }
   },
 
-  async necessidadeOng (request, response) {
+  async necessidadeOng (request, response){
+    const usuario_id = request.headers.authorization;
+
+    try {
+      const necessidade = await connection('tbl_necessidade')
+      .where('usuario_id', usuario_id)
+      .select('*');
+
+      return response.json(necessidade);
+      
+    } catch (error) {
+      console.log(error, "Erro na busca")
+      return response.json({
+        Mensagem: "Erro na busca"
+      })
+    }
+    
+  },
+  async criaNecessidade (request, response) {
     const {
       descricao,
       quantidade,
       situacao,
       usuario_id
     } = request.body
+    
+    const token = request.headers.authorization;
 
     const id_identificador = crypto.randomBytes(2).toString('HEX');
 
     const identificador = id_identificador;
 
     try {
-      await connection('tbl_necessidade').insert({
+      const [id] = await connection('tbl_necessidade').insert({
         descricao,
         quantidade,
         situacao,
@@ -50,5 +70,23 @@ module.exports = {
         Mensagem: "Erro no cadastro"
       })
     }
+  },
+
+  async deletaNecessidade (request, response) {
+    const {id} = request.params;
+    const usuario_id = request.headers.authorization;
+
+    const necessidade = await connection('tbl_necessidade')
+    .where('id_necessidade', id)
+    .select('usuario_id')
+    .first();
+
+    if(necessidade.usuario_id != usuario_id){
+      return response.status(401).json({
+        error: "Operation not permeitted"
+      })
+    }
+    await connection('tbl_necessidade').where('id_necessidade', id).delete();
+    return response.status(204).send();
   },
 }
