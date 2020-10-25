@@ -65,7 +65,7 @@ module.exports = {
        // VALIDAR O RESULTADO DA QUERY ACIMA
       if(!user){
         console.log("Email Não encontrado" )
-        return response.status(400).json({ error: 'No Email Ong Found with this id'});
+        return response.status(400).json({ error: 'No Email doador Found with this id'});
       } else {
           const match = await bcrypt.compare(senha, user.senha_usuario);
             if(match) {

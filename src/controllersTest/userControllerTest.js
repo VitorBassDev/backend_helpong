@@ -28,21 +28,20 @@ module.exports = {
       .select()
       . where({ 
         email_usuario: request.body.email_usuario
-        })
+        }) 
       
         if(rows.length > 0 ){
           response.json({
             mensagem: "email Já cadastrado"
           });
           console.log({
-            rows, 
             mensagem: "Email em uso"});
         } else {
           await bcrypt.hash(request.body.senha_usuario, 10,(errBcrypt, hash) => {
             if(errBcrypt){
               return response.status(500).json({
                 error: errBcrypt,
-                Mensagem: "Erro na Senha"
+                //Mensagem: "Erro na Senha"
               });
             } else {
               connection.insert({
@@ -76,12 +75,13 @@ module.exports = {
     
     const dados = request.body;    
 
-    const rows = await connection     
-      .from("tbl_usuario")
+    try {
+      const rows = await connection     
+      .from('tbl_usuario')
       .select()
       . where({ 
-        email_usuario: request.body.email_usuario
-        })
+        email_usuario: '?' 
+        }, [request.email_usuario])
       
         if(rows.length > 0 ){
           response.json({
@@ -118,5 +118,13 @@ module.exports = {
               }
           });
         }
+      
+    } catch (error) {
+      console.log("Erro na Criação do Doador ...................!", error)
+        return response.json({
+          Mensagem: "Erro na Criação do Doador ...................!"
+        })
+      }
+    
   },
 }

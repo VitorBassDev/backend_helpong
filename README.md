@@ -13,12 +13,23 @@ _backend em desenvolvimento_
 
 # Banco de Dados:
 ```sh
-npm install mysql2 --save
+npm install sqlite --save
 ```
 
 # Query Builder:
 ```sh
-npm install knex --save
+npm install knex --save - VANTAGEM (CRIAR O HISTÓRICOS)
+```
+
+# Criar Configuração do Banco
+```sh
+npx knex init __cria o arquivo knexfile.js__
+```
+
+# Criar migrations:
+```sh
+Criar arquivo: npx knex migrate:make tbl_usuario
+Executar arquivo: npx knex migrate:latest
 ```
 
 # Exemplo de Query Builder:
@@ -26,7 +37,14 @@ npm install knex --save
 Exemplo: knex('user').where('name', 'vitor').select('*');
 ```
 
-Windows:
+# Tabelas do Banco de Dados
+```sh
+* tbl_perfil
+* tbl_usuario
+* tbl_necessidade
+* tbl_endereco
+* tbl_contato
+```
 
 ```sh
 edit autoexec.bat

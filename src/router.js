@@ -1,10 +1,10 @@
 const express = require('express');
-//const connection = require ('../database/connection');
-const rotaUser = require('../src/routers/user');
-const rotaAuth = require('../src/routers/auth');
 const routes = express.Router();
+const rotaUsuario = require('../src/routers/usuario');
+//const rotaNecessidade = require('../src/routers/necessidade');
 
-routes.use('/user' , rotaUser);
-routes.use('/auth' , rotaAuth);
+
+routes.use('/usuario' , rotaUsuario);
+//routes.use('/necessidade' , rotaNecessidade);
 
 module.exports = routes;
