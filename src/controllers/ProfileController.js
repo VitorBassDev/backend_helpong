@@ -1,27 +1,29 @@
-const expres = require('express');
 const connection = require ('../database/connection');
 
 module.exports = {
 
   async loginOng (request, response){
 
-    const {acesso} = request.body;
+    const {cpf} = request.body;
 
     try {
       const usuario = await connection('tbl_usuario')
-      .where('cpf', acesso)
-      .select('nome')
+      .where('cpf', cpf)
+      .select('nome', 'id_usuario')
       .first();
 
       if(!usuario){
+        console.log("Erro na Busca");
         return response.status(400).json({
            Error: 'Ong não encontrada'
         })
       }
+      console.log(usuario);
       return response.json(usuario)
+    
 
     } catch (error) {
-      
+      console.log(error);
       return response.json({
         Mensagem: "Erro na Busca"
       })

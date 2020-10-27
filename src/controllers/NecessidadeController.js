@@ -21,7 +21,7 @@ module.exports = {
     }
   },
 
-  async necessidadeOng (request, response){
+  async necessidadePorOng (request, response){
     const usuario_id = request.headers.authorization;
 
     try {
@@ -44,22 +44,24 @@ module.exports = {
       descricao,
       quantidade,
       situacao,
-      usuario_id
     } = request.body
     
-    const token = request.headers.authorization;
+    //const token = request.headers.authorization;
+    const usuario_id = request.headers.authorization;
+
+    const user_id = usuario_id
 
     const id_identificador = crypto.randomBytes(2).toString('HEX');
 
     const identificador = id_identificador;
 
     try {
-      const [id] = await connection('tbl_necessidade').insert({
+      const [id, usuario_id] = await connection('tbl_necessidade').insert({
         descricao,
         quantidade,
         situacao,
         identificador,
-        usuario_id,
+        usuario_id : user_id
       })
         console.log("Necessidade Cadastrada com Sucesso")
         return response.json({ identificador })
