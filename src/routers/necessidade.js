@@ -9,7 +9,7 @@ const NecessidadeController = require('../controllers/NecessidadeController');
 //const ProfileController = require('../controllers/ProfileController');
 
 router.get('/necessidadeAll', NecessidadeController.listaNecessidade);
-router.get('/necessidadeOng', NecessidadeController.necessidadeOng);
+router.get('/necessidadeOng', NecessidadeController.necessidadePorOng);
 router.post('/novaNecessidade', NecessidadeController.criaNecessidade);
 router.delete('/deletaNecessidade/:id', NecessidadeController.deletaNecessidade);
 
