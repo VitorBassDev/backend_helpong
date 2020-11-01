@@ -5,7 +5,7 @@ const crypto = require ('crypto');
 
 module.exports = {
 
-  async listaNecessidade (request, response){
+  async necessidadeGeral (request, response){
 
     try {
       const necessidade = await connection('tbl_necessidade').select('*')  
@@ -39,7 +39,7 @@ module.exports = {
     }
     
   },
-  async criaNecessidade (request, response) {
+  async registraNecessidade (request, response) {
     const {
       descricao,
       quantidade,

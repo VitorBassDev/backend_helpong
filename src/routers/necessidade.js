@@ -8,9 +8,9 @@ const router = express.Router();
 const NecessidadeController = require('../controllers/NecessidadeController');
 //const ProfileController = require('../controllers/ProfileController');
 
-router.get('/necessidadeAll', NecessidadeController.listaNecessidade);
+router.get('/necessidadeGeral', NecessidadeController.necessidadeGeral);
 router.get('/necessidadeOng', NecessidadeController.necessidadePorOng);
-router.post('/novaNecessidade', NecessidadeController.criaNecessidade);
+router.post('/registraNecessidade', NecessidadeController.registraNecessidade);
 router.delete('/deletaNecessidade/:id', NecessidadeController.deletaNecessidade);
 
 

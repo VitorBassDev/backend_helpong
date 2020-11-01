@@ -35,14 +35,14 @@ module.exports = {
               console.log('Granted! Senha Verificada', usuario.nome);
               const token = jwt.sign({
                 id: usuario.id_usuario
-              }, "segredo", {
+              }, process.env.PORT_BACKEND, {
                 expiresIn: "1h"
                 });
                 console.log(token)
-                  return response.status(200).json({
-                    Mensagem: "Autenticado com Sucesso",
-                    token, usuario
-                  });
+                return response.status(200).json({
+                  Mensagem: "Autenticado com Sucesso",
+                  usuario, token
+                });
   
             } else {
   
@@ -51,7 +51,6 @@ module.exports = {
                 error: 'Acesso Negado'
               })
             }
-                      
         }
    
       } catch (error) {
