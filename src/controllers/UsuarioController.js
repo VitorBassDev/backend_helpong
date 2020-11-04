@@ -40,8 +40,8 @@ module.exports = {
         cpf,
         perfil: 1
       })          
-        console.log(senhaCrip)
-        return response.json({cpf})
+        console.log(nome)
+        return response.json({email})
     } catch ( error) {
       console.log(error, "Erro no cadastro da ONG")
       return response.json({
