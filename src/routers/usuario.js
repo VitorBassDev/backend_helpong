@@ -6,13 +6,14 @@ const router = express.Router();
  */ 
 const UsuarioController = require('../controllers/UsuarioController');
 
-const UsuarioControllerTest = require('../controllersTest/userControllerTest');
-
 router.get('/usuario-all', UsuarioController.listarUsuario);
 router.post('/usuario-ong', UsuarioController.criarOng);
 router.post('/usuario-doador', UsuarioController.criarDoador);
 
+
+const UsuarioControllerTest = require('../controllersTest/userControllerTest');
 router.post('/usuarioTest-ong', UsuarioControllerTest.criarOng);
+router.post('/usuarioTest-Doador', UsuarioControllerTest.criarDoador);
 
 
 module.exports = router;

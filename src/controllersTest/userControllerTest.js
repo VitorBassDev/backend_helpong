@@ -30,21 +30,17 @@ module.exports = {
       email,
       senha,
       cpf,
-      cep,
-      cidade,
-      bairro,
-      logadouro,
     } = request.body
 
+    // CRIPTOGRAFAR SENHA
     const saltRounds = 10;
     const senhaCrip = await bcrypt.hash(request.body.senha, saltRounds);
 
+    // GERAR NÚMERO Automático
     const id_identificador = crypto.randomBytes(2).toString('HEX');
-
     const identificador = id_identificador;
 
     try {     
-
       const usuarioId = await connection('tbl_usuario').insert({
         nome,
         email,
@@ -56,12 +52,16 @@ module.exports = {
 
         console.log(nome)
         return response.json({email})
+
     } catch ( error) {
+
       console.log(error, "Erro no cadastro da ONG")
+
       return response.json({
         Mensagem: "Erro no cadastro da ONG"
       })
     }
+  
   },
 
   async criarDoador (request, response) {
@@ -69,27 +69,38 @@ module.exports = {
       nome,
       email,
       senha,
-      cpf
+      cpf,
     } = request.body
 
+    // CRIPTOGRAFAR SENHA
     const saltRounds = 10;
     const senhaCrip = await bcrypt.hash(request.body.senha, saltRounds);
-  
-    try {
-      await connection('tbl_usuario').insert({
+
+    // GERAR NÚMERO Automático
+    const id_identificador = crypto.randomBytes(2).toString('HEX');
+    const identificador = id_identificador;
+
+    try {     
+      const usuarioId = await connection('tbl_usuario').insert({
         nome,
         email,
         senha: senhaCrip,
         cpf,
+        identificador,
         perfil: 2
-      })
-        console.log("Cadastro de ONG")
-        return response.json({cpf})
-    } catch (error) {
+      })                
+
+        console.log(nome)
+        return response.json({email})
+
+    } catch ( error) {
+
       console.log(error, "Erro no cadastro da ONG")
+
       return response.json({
         Mensagem: "Erro no cadastro da ONG"
-      });
+      })
     }
+  
   },
 }
