@@ -1,90 +1,149 @@
-const bcrypt = require ('bcrypt');
-const jwt  = require ('jsonwebtoken');
-const connection  = require ('../database/connection');
+require('dotenv/config');
+const connection = require ('../database/connection');
+const bcrypt      = require('bcrypt');
+const jwt         = require('jsonwebtoken');
 
 module.exports = {
 
-  async auth_ong (request, response, next){
+  /** 
+   * ONG
+   * LOGIN COM EMAIL E SENHA */
 
-    const  {
-      email_usuario,
+  async authOng (request, response){
+
+    const {
+      email,
       senha_usuario
     } = request.body;
-
-    var senha = request.body.senha_usuario;
+      
+      try {
+        const usuario = await connection('tbl_usuario')
+        .where('email', email)
+        .whereRaw('perfil = ?', 1)
+        .select('*')
+        .first();
   
-    // BUSCAR EMAIL E TIPO DE PERFIL NO BANCO DE DADOS
-    const user = await connection('tbl_usuario')
-      .where('email_usuario', email_usuario)
-      //.whereRaw('senha_usuario', senha_usuario )
-      .whereRaw('perfil_usuario = ?', 1)
-      .select('nome_usuario', 'perfil_usuario', 'senha_usuario')
-      .first();
-       // VALIDAR O RESULTADO DA QUERY ACIMA
-      if(!user){
-        console.log("Email Não encontrado" )
-        return response.status(400).json({ error: 'No Email Ong Found with this id'});
-      } else {
-          const match = await bcrypt.compare(senha, user.senha_usuario);
+        if(!usuario){
+          console.log("Ong não encontrada");
+          return response.status(400).json({
+             Error: 'Ong não encontrada'
+          })
+        } else {
+  
+          const match = await bcrypt.compare(senha_usuario, usuario.senha);
             if(match) {
-              console.log('Granted! Senha Verificada');
+              console.log('Granted! Senha Verificada', usuario.nome);
               const token = jwt.sign({
-                id: user.email_usuario
-              }, "segredo", {
+                id: usuario.id_usuario
+              }, process.env.PORT_BACKEND, {
                 expiresIn: "1h"
                 });
-                  return response.status(200).json({
-                    Mensagem: "Autenticado com Sucesso",
-                    token, user
-                  });
+                console.log(token)
+                return response.status(200).json({
+                  Mensagem: "Autenticado com Sucesso",
+                  usuario, token
+                });
+  
             } else {
+  
               console.log('Access Denied');
               return response.status(400).json({
                 error: 'Acesso Negado'
               })
-            }          
-          }
-  },
-  
-  async auth_doador (request, response, next){
+            }
+        }
+   
+      } catch (error) {
+        console.log(error);
+        return response.json({
+          Mensagem: "Erro na Busca - Catch"
+        })
+      }
+    },
+  /** ------------------------------------------------------------------------------------------- */
 
-    const  {
-      email_usuario,
+  /** 
+   * DOADOR
+   * LOGIN COM EMAIL E SENHA */
+  async authDoador (request, response){
+
+    const {
+      email,
       senha_usuario
     } = request.body;
-
-    var senha = request.body.senha_usuario;
+      
+      try {
+        const usuario = await connection('tbl_usuario')
+        .where('email', email)
+        .whereRaw('perfil = ?', 2)
+        .select('*')
+        .first();
   
-    // BUSCAR EMAIL E TIPO DE PERFIL NO BANCO DE DADOS
-    const user = await connection('tbl_usuario')
-      .where('email_usuario', email_usuario)
-      //.whereRaw('senha_usuario', senha_usuario )
-      .whereRaw('perfil_usuario = ?', 2)
-      .select('nome_usuario', 'perfil_usuario', 'senha_usuario')
-      .first();
-       // VALIDAR O RESULTADO DA QUERY ACIMA
-      if(!user){
-        console.log("Email Não encontrado" )
-        return response.status(400).json({ error: 'No Email Ong Found with this id'});
-      } else {
-          const match = await bcrypt.compare(senha, user.senha_usuario);
-            if(match) {
-              console.log('Granted! Senha Verificada');
-              const token = jwt.sign({
-                id: user.email_usuario
-              }, "segredo", {
-                expiresIn: "1h"
+        if(!usuario){
+          console.log("Ong não encontrada");
+          return response.status(400).json({
+             Error: 'Ong não encontrada'
+          })
+        } else {
+  
+        const match = await bcrypt.compare(senha_usuario, usuario.senha);
+          if(match) {
+            console.log('Granted! Senha Verificada', usuario.nome);
+            const token = jwt.sign({
+              id: usuario.id_usuario
+            }, "segredo", {
+              expiresIn: "1h"
+              });
+              console.log(token)
+                return response.status(200).json({
+                  Mensagem: "Autenticado com Sucesso",
+                  token, usuario
                 });
-                  return response.status(200).json({
-                    Mensagem: "Autenticado com Sucesso",
-                    token, user
-                  });
-            } else {
-              console.log('Access Denied');
-              return response.status(400).json({
-                error: 'Acesso Negado'
-              })
-            }          
-          }
+
+          } else {
+
+            console.log('Access Denied');
+            return response.status(400).json({
+              error: 'Acesso Negado'
+            })
+          }        
+        }
+      } catch (error) {
+        console.log(error);
+        return response.json({
+          Mensagem: "Erro na Busca - Catch"
+        })
+      }
   },
-}   
+  /** ------------------------------------------------------------------------------------------- */
+
+  /** LOGIN COM CPF */
+  async loginCpf (request, response){
+
+    const {cpf} = request.body;
+
+    try {
+      const usuario = await connection('tbl_usuario')
+      .where('cpf', cpf)
+      .select('nome', 'id_usuario')
+      .first();
+
+      if(!usuario){
+        console.log("Erro na Busca");
+        return response.status(400).json({
+           Error: 'Ong não encontrada'
+        })
+      }
+      console.log(usuario);
+      return response.json(usuario)
+    
+
+    } catch (error) {
+      console.log(error);
+      return response.json({
+        Mensagem: "Erro na Busca"
+      })
+    }   
+  },
+  /** ------------------------------------------------------------------------------------------- */
+}

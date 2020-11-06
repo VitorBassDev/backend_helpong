@@ -2,6 +2,7 @@ const expres = require('express');
 const connection = require ('../database/connection');
 
 const crypto = require ('crypto');
+const { innerJoin } = require('../database/connection');
 
 module.exports = {
 
@@ -20,6 +21,65 @@ module.exports = {
 
     }
   },
+
+  async resumo (request, response){
+
+    try {
+    
+      const resumo = await connection('tbl_necessidade')
+      .innerJoin('tbl_endereco',
+              'tbl_endereco.id_endereco', 
+                  '=', 
+                    'tbl_necessidade.endereco')
+                     
+      .select([
+        'tbl_necessidade.id_necessidade', 
+        'tbl_necessidade.descricao', 
+        'tbl_endereco.cidade',
+        //'tbl_usuario.nome'
+      ])
+
+      return response.json(resumo);
+
+    } catch (error) {
+      console.log(error, "Parametros não encontrados")
+      
+      return response.json({
+        Mensagem: "Parametros não encontrados"
+      })
+
+    }
+  },
+
+
+  async necessidadeDoacao (request, response){
+
+    try {
+    
+      const resumo = await connection('tbl_necessidade')
+      .join('tbl_usuario',  'tbl_usuario.id_usuario', '=', 'tbl_necessidade.usuario')
+      .select([
+        'tbl_necessidade.id_necessidade', 
+        'tbl_necessidade.descricao', 
+        'tbl_necessidade.situacao', 
+        'tbl_necessidade.identificador', 
+        'tbl_usuario.nome',
+        'tbl_usuario.email',
+        'tbl_usuario.cpf',
+      ])
+
+      return response.json(resumo);
+
+    } catch (error) {
+      console.log(error, "Parametros não encontrados")
+      
+      return response.json({
+        Mensagem: "Parametros não encontrados"
+      })
+
+    }
+  },
+
 
   async necessidadePorOng (request, response){
     const usuario_id = request.headers.authorization;
@@ -42,8 +102,14 @@ module.exports = {
   async registraNecessidade (request, response) {
     const {
       descricao,
-      quantidade,
-      situacao,
+      cep,
+      cidade,
+      bairro,
+      logadouro,
+      ddd,
+      numero,
+
+      
     } = request.body
     
     //const token = request.headers.authorization;
@@ -56,15 +122,34 @@ module.exports = {
     const identificador = id_identificador;
 
     try {
+
+      const enderecoId = await connection('tbl_endereco').insert({
+        cep,
+        cidade,
+        bairro,
+        logadouro,
+      })    
+        
+      const endereco_id = enderecoId[0];
+
+      const conatoId = await connection('tbl_contato').insert({
+        ddd,
+        numero,
+      })    
+
+      const contato_id = conatoId[0];
+
       const [id, usuario_id] = await connection('tbl_necessidade').insert({
         descricao,
-        quantidade,
-        situacao,
+        situacao: "Não Atendida",
         identificador,
-        usuario : user_id,
-        endereco: 1,
-        telefone: 1
+        usuario: user_id,
+        endereco: endereco_id,
+        contato: contato_id,
+
       })
+
+      
         console.log("Necessidade Cadastrada com Sucesso")
         return response.json({ identificador })
 
@@ -82,15 +167,16 @@ module.exports = {
 
     const necessidade = await connection('tbl_necessidade')
     .where('id_necessidade', id)
-    .select('usuario_id')
+    .select('usuario')
     .first();
 
-    if(necessidade.usuario_id != usuario_id){
+    if(necessidade.usuario != usuario_id){
       return response.status(401).json({
         error: "Operation not permeitted"
       })
     }
     await connection('tbl_necessidade').where('id_necessidade', id).delete();
+    console.log("Deletado com Sucesso")
     return response.status(204).send();
   },
 }

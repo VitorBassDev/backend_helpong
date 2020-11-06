@@ -1,24 +1,27 @@
 const expres = require('express');
 const connection = require ('../database/connection');
 
-const crypto = require ('crypto');
-const { join } = require('path');
-
 module.exports = {
 
   async NecessidadeJoin (request, response){
+    ///const id_necessidade = request.headers.authorization;
+
+    const {id} = request.params;
 
     try {
-      const necessidade = await connection('tbl_necessidade')
+      const doacao = await connection('tbl_necessidade')
       .join('tbl_usuario',  'tbl_usuario.id_usuario', '=', 'tbl_necessidade.usuario_id')
       .select([
-        'tbl_necessidade.*', 
+        'tbl_necessidade.id_necessidade', 
+        'tbl_necessidade.descricao', 
+        'tbl_necessidade.situacao', 
+        'tbl_necessidade.identificador', 
         'tbl_usuario.nome',
         'tbl_usuario.email',
         'tbl_usuario.cpf',
-      ]);
+      ]).first(id);
 
-      return response.json(necessidade);
+      return response.json(doacao);
       
     } catch (error) {
       console.log(error, "Erro na busca")

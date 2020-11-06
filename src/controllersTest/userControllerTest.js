@@ -1,130 +1,95 @@
 const bcrypt = require ('bcrypt');
+const expres = require('express');
+
+const crypto = require ('crypto');
+
+
 const connection = require ('../database/connection');
 
 module.exports = {
 
-  select_user_test (request, response) {
-    
-  const resultado = connection.select().table("tbl_usuario").then(data =>{
-    console.log(data);
-  }).catch(err => {
-    console.log(err);
-  });
-
-  return response.json(resultado);
-  },
-
-  async create_user_ong (request, response) {
-    const  {
-      nome_usuario,
-      email_usuario,
-      senha_usuario,
-    } = request.body;
-    
-    const dados = request.body;    
-
-    const rows = await connection     
-      .from("tbl_usuario")
-      .select()
-      . where({ 
-        email_usuario: request.body.email_usuario
-        }) 
-      
-        if(rows.length > 0 ){
-          response.json({
-            mensagem: "email Já cadastrado"
-          });
-          console.log({
-            mensagem: "Email em uso"});
-        } else {
-          await bcrypt.hash(request.body.senha_usuario, 10,(errBcrypt, hash) => {
-            if(errBcrypt){
-              return response.status(500).json({
-                error: errBcrypt,
-                //Mensagem: "Erro na Senha"
-              });
-            } else {
-              connection.insert({
-                nome_usuario, 
-                email_usuario,
-                senha_usuario: hash,
-                perfil_usuario: 1
-                }).into('tbl_usuario').then(data =>{
-                  console.log("cadastrou");
-                  return response.json({
-                    Mensagem: data,
-                    Email: email_usuario
-                  });
-                    }).catch(err => {
-                      console.log(err);
-                        return response.json({
-                          Mensagem: "Erro no Cadastro"
-                        });
-                      });
-              }
-          });
-        }
-  },
-
-  async create_user_doador (request, response) {
-    const  {
-      nome_usuario,
-      email_usuario,
-      senha_usuario,
-    } = request.body;
-    
-    const dados = request.body;    
+  async listarUsuario (request, response){
 
     try {
-      const rows = await connection     
-      .from('tbl_usuario')
-      .select()
-      . where({ 
-        email_usuario: '?' 
-        }, [request.email_usuario])
-      
-        if(rows.length > 0 ){
-          response.json({
-            mensagem: "email Já cadastrado"
-          });
-          console.log({
-            rows, 
-            mensagem: "Email em uso"});
-        } else {
-          await bcrypt.hash(request.body.senha_usuario, 10,(errBcrypt, hash) => {
-            if(errBcrypt){
-              return response.status(500).json({
-                error: errBcrypt,
-                Mensagem: "Erro na Senha"
-              });
-            } else {
-              connection.insert({
-                nome_usuario, 
-                email_usuario,
-                senha_usuario: hash,
-                perfil_usuario: 2
-                }).into('tbl_usuario').then(data =>{
-                  console.log("cadastrou");
-                    return response.json({
-                      Mensagem: data,
-                      Email: email_usuario
-                    });
-                  }).catch(err => {
-                      console.log(err);
-                      return response.json({
-                        Mensagem: "Erro no Cadastro"
-                      });
-                    });
-              }
-          });
-        }
-      
+      const usuario = await connection('tbl_usuario').select('*')  
+        console.log("Lista de Usuários")
+        return response.json(usuario);
     } catch (error) {
-      console.log("Erro na Criação do Doador ...................!", error)
-        return response.json({
-          Mensagem: "Erro na Criação do Doador ...................!"
-        })
-      }
-    
+      console.log(error, "Parametros não encontrados")
+      
+      return response.json({
+        Mensagem: "Parametros não encontrados"
+      })
+
+    }
+  },
+
+  async criarOng (request, response) {
+    const {
+      nome,
+      email,
+      senha,
+      cpf,
+      cep,
+      cidade,
+      bairro,
+      logadouro,
+    } = request.body
+
+    const saltRounds = 10;
+    const senhaCrip = await bcrypt.hash(request.body.senha, saltRounds);
+
+    const id_identificador = crypto.randomBytes(2).toString('HEX');
+
+    const identificador = id_identificador;
+
+    try {     
+
+      const usuarioId = await connection('tbl_usuario').insert({
+        nome,
+        email,
+        senha: senhaCrip,
+        cpf,
+        identificador,
+        perfil: 1
+      })                
+
+        console.log(nome)
+        return response.json({email})
+    } catch ( error) {
+      console.log(error, "Erro no cadastro da ONG")
+      return response.json({
+        Mensagem: "Erro no cadastro da ONG"
+      })
+    }
+  },
+
+  async criarDoador (request, response) {
+    const {
+      nome,
+      email,
+      senha,
+      cpf
+    } = request.body
+
+    const saltRounds = 10;
+    const senhaCrip = await bcrypt.hash(request.body.senha, saltRounds);
+  
+    try {
+      await connection('tbl_usuario').insert({
+        nome,
+        email,
+        senha: senhaCrip,
+        cpf,
+        perfil: 2
+      })
+        console.log("Cadastro de ONG")
+        return response.json({cpf})
+    } catch (error) {
+      console.log(error, "Erro no cadastro da ONG")
+      return response.json({
+        Mensagem: "Erro no cadastro da ONG"
+      });
+    }
   },
 }
