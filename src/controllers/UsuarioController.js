@@ -91,7 +91,7 @@ module.exports = {
       })                
 
         console.log(nome)
-        return response.json({email})
+        return response.json({identificador})
 
     } catch ( error) {
 
