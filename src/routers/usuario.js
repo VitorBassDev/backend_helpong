@@ -14,6 +14,9 @@ router.post('/usuario-doador', UsuarioController.criarDoador);
 const UsuarioControllerTest = require('../controllersTest/userControllerTest');
 router.post('/usuarioTest-ong', UsuarioControllerTest.criarOng);
 router.post('/usuarioTest-Doador', UsuarioControllerTest.criarDoador);
+router.patch('/usuarioEditarTest/:id', UsuarioControllerTest.editarUsuario);
+router.post('/usuarioUnicoTest', UsuarioControllerTest.buscarUsuario);
+
 
 
 module.exports = router;

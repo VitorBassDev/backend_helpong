@@ -5,6 +5,7 @@ const crypto = require ('crypto');
 
 
 const connection = require ('../database/connection');
+const { resumo } = require('./NecessidadeControllerTest');
 
 module.exports = {
 
@@ -102,5 +103,73 @@ module.exports = {
       })
     }
   
+  },
+
+  async editarUsuario (request, response){
+    const {
+      nome,
+      email,
+      cpf,
+    } = request.body
+
+    const {id} = request.params;
+    const usuario_id = request.headers.authorization;
+
+    try {
+    const {id_usuario} = await connection('tbl_usuario')
+    .where('id_usuario', id)
+    .select('*')
+    .first();
+  
+    const idUser = id_usuario
+
+    const resultado = await connection('tbl_usuario')
+    .where('id_usuario', idUser)
+    .update({
+      'email': email,
+      'nome':nome,
+      'cpf': cpf});
+
+    return response.json(resultado)
+
+
+    } catch (error) {
+      console.log(error, "Parametros não encontrados")
+      
+      return response.json({
+        Mensagem: "Parametros não encontrados"
+      })
+
+    }
+  },
+
+
+  async buscarUsuario (request, response){
+    const {
+      acesso,
+      nome,
+      email,
+      cpf,
+    } = request.body
+
+    //const {id} = request.params;
+    const usuario_id = request.headers.authorization;
+
+    try {
+      const resultado = await connection('tbl_usuario')
+        .where('id_usuario', acesso)
+        .select('*')
+        .first();
+    
+       return response.json(resultado)
+
+    } catch (error) {
+      console.log(error, "Parametros não encontrados")
+      
+      return response.json({
+        Mensagem: "Parametros não encontrados"
+      })
+
+    }
   },
 }
