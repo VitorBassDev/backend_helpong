@@ -3,9 +3,38 @@ const connection = require ('../database/connection');
 
 module.exports = {
 
+  async receberDoacao (request, response) {
+    const {id} = request.params;
+    const usuario_id = request.headers.authorization;
+
+    try{
+      const doacao = await connection('tbl_necessidade')
+      .where('id_necessidade', id)
+      .update('situacao', 'Atendida');    
+
+      if(doacao){
+        console.log("Necessidade Atendida")
+        return response.json({
+          Mensagem: "Necessidade Atendida",
+          doacao
+        })
+
+      } else {
+          console.log("Deu Erro")
+      }
+
+    } catch(error){
+
+      console.log(error, "Erro na alteração")
+      return response.json({
+        Mensagem: "Erro na alteração"
+      })
+
+    }
+  },
+
   async NecessidadeJoin (request, response){
     ///const id_necessidade = request.headers.authorization;
-
     const {id} = request.params;
 
     try {

@@ -20,7 +20,6 @@ router.get('/resumoDoacao',                  NecessidadeControllerTest.necessida
 router.get('/resumo',                  NecessidadeControllerTest.resumo);
 router.post('/registraNecessidadetest', NecessidadeControllerTest.registraNecessidade);
 router.delete('/deletaNecessidadeTest/:id', NecessidadeControllerTest.deletaNecessidade);
-router.post('/receberDoacaoTest/:id', NecessidadeControllerTest.recebeDoacao);
 router.get('/necessidadeOngTest',        NecessidadeControllerTest.necessidadePorOng);
 router.get('/buscaId/:id',        NecessidadeControllerTest.BuscaPorID);
 

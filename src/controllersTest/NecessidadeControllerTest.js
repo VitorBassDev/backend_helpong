@@ -180,32 +180,6 @@ module.exports = {
     return response.status(204).send();
   },
 
-
-  async recebeDoacao (request, response) {
-    const {id} = request.params;
-    const usuario_id = request.headers.authorization;
-
-  try{
-    const alteracao = await connection('tbl_necessidade')
-    .where('id_necessidade', id)
-    .update('situacao', 'Atendida');    
-
-    if(alteracao){
-      console.log("Necessidade Atendida")
-      return response.json(alteracao)
-    } else {
-      console.log("Deu Erro")
-      
-    }
-
-    } catch(error){
-      console.log(error, "Erro na alteração")
-      return response.json({
-        Mensagem: "Erro na alteração"
-      })
-    }
-  },
-
   async BuscaPorID (request, response) {
     const {id} = request.params;
     const usuario_id = request.headers.authorization;
