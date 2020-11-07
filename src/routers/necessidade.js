@@ -15,13 +15,13 @@ router.delete('/deletaNecessidade/:id', NecessidadeController.deletaNecessidade)
 
 //router.get('/necessidadeOng', ProfileController.necessidadeOng);
 
-
 const NecessidadeControllerTest = require('../controllersTest/NecessidadeControllerTest');
 router.get('/resumoDoacao',                  NecessidadeControllerTest.necessidadeDoacao);
 router.get('/resumo',                  NecessidadeControllerTest.resumo);
 router.post('/registraNecessidadetest', NecessidadeControllerTest.registraNecessidade);
 router.delete('/deletaNecessidadeTest/:id', NecessidadeControllerTest.deletaNecessidade);
+router.post('/receberDoacaoTest/:id', NecessidadeControllerTest.recebeDoacao);
 router.get('/necessidadeOngTest',        NecessidadeControllerTest.necessidadePorOng);
-
+router.get('/buscaId/:id',        NecessidadeControllerTest.BuscaPorID);
 
 module.exports = router;

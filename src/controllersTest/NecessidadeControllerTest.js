@@ -99,6 +99,7 @@ module.exports = {
     }
     
   },
+
   async registraNecessidade (request, response) {
     const {
       descricao,
@@ -149,7 +150,6 @@ module.exports = {
 
       })
 
-      
         console.log("Necessidade Cadastrada com Sucesso")
         return response.json({ identificador })
 
@@ -179,4 +179,46 @@ module.exports = {
     console.log("Deletado com Sucesso")
     return response.status(204).send();
   },
+
+
+  async recebeDoacao (request, response) {
+    const {id} = request.params;
+    const usuario_id = request.headers.authorization;
+
+  try{
+    const alteracao = await connection('tbl_necessidade')
+    .where('id_necessidade', id)
+    .update('situacao', 'Atendida');    
+
+    console.log("Necessidade Atendida")
+    return response.json(alteracao)
+    } catch(error){
+      console.log(error, "Erro na alteração")
+      return response.json({
+        Mensagem: "Erro na alteração"
+      })
+    }
+  },
+
+  async BuscaPorID (request, response) {
+    const {id} = request.params;
+ 
+    try {
+      const necessidade = await connection('tbl_necessidade')
+      .where('id_necessidade', id)
+      .select('*');
+
+      return response.json({
+        Mensagem: "Necessidade Encontrada", 
+        necessidade
+      });
+      
+    } catch (error) {
+      console.log(error, "Erro na busca")
+      return response.json({
+        Mensagem: "Erro na busca"
+      })
+    }
+  },
+
 }
