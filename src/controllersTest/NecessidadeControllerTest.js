@@ -190,8 +190,14 @@ module.exports = {
     .where('id_necessidade', id)
     .update('situacao', 'Atendida');    
 
-    console.log("Necessidade Atendida")
-    return response.json(alteracao)
+    if(alteracao){
+      console.log("Necessidade Atendida")
+      return response.json(alteracao)
+    } else {
+      console.log("Deu Erro")
+      
+    }
+
     } catch(error){
       console.log(error, "Erro na alteração")
       return response.json({
@@ -202,16 +208,14 @@ module.exports = {
 
   async BuscaPorID (request, response) {
     const {id} = request.params;
+    const usuario_id = request.headers.authorization;
  
     try {
       const necessidade = await connection('tbl_necessidade')
       .where('id_necessidade', id)
       .select('*');
 
-      return response.json({
-        Mensagem: "Necessidade Encontrada", 
-        necessidade
-      });
+      return response.json(necessidade);
       
     } catch (error) {
       console.log(error, "Erro na busca")

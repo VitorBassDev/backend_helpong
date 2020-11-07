@@ -82,10 +82,10 @@ module.exports = {
 
     const necessidade = await connection('tbl_necessidade')
     .where('id_necessidade', id)
-    .select('usuario_id')
+    .select('usuario')
     .first();
 
-    if(necessidade.usuario_id != usuario_id){
+    if(necessidade.usuario != usuario_id){
       return response.status(401).json({
         error: "Operation not permeitted"
       })
