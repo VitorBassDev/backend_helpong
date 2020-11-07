@@ -103,4 +103,38 @@ module.exports = {
     }
   
   },
+
+  async editarUsuario (request, response){
+    const {
+      nome,
+      email,
+      cpf,
+    } = request.body
+
+    //const {id} = request.params;
+    const usuario_id = request.headers.authorization;
+
+    try {
+
+    const resultado = await connection('tbl_usuario')
+    .where('id_usuario', usuario_id)
+    .update({
+      'email': email,
+      'nome':nome,
+      'cpf': cpf});
+
+      console.log("Alteração de usuário")
+      return response.json(resultado)
+    
+
+
+    } catch (error) {
+      console.log(error, "Parametros não encontrados")
+      
+      return response.json({
+        Mensagem: "Parametros não encontrados"
+      })
+
+    }
+  },
 }
