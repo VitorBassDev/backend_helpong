@@ -102,8 +102,14 @@ module.exports = {
   async registraNecessidade (request, response) {
     const {
       descricao,
-      quantidade,
-      situacao,
+      cep,
+      cidade,
+      bairro,
+      logadouro,
+      ddd,
+      numero,
+
+      
     } = request.body
     
     //const token = request.headers.authorization;
@@ -116,17 +122,37 @@ module.exports = {
     const identificador = id_identificador;
 
     try {
-      const [id, usuario_id] = await connection('tbl_necessidade').insert({
+
+      const enderecoId = await connection('tbl_endereco').insert({
+        cep,
+        cidade,
+        bairro,
+        logadouro,
+      })    
+        
+      const endereco_id = enderecoId[0];
+
+      const conatoId = await connection('tbl_contato').insert({
+        ddd,
+        numero,
+      })    
+
+      const contato_id = conatoId[0];
+
+      const [resultado] = await connection('tbl_necessidade').insert({
         descricao,
-        quantidade,
-        situacao,
+        situacao: "Não Atendida",
         identificador,
-        usuario : user_id,
-        endereco: 1,
-        telefone: 1
+        usuario: user_id,
+        endereco: endereco_id,
+        contato: contato_id,
+
       })
-        console.log("Necessidade Cadastrada com Sucesso")
+
+      if(resultado){
+        console.log(descricao , "Necessidade Cadastrada com Sucesso")
         return response.json({ identificador })
+      }
 
     } catch ( error) {
       console.log(error, "Erro no cadastro")

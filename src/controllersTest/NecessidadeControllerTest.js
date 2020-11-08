@@ -201,7 +201,7 @@ module.exports = {
 
       const contato_id = conatoId[0];
 
-      const [id, usuario_id] = await connection('tbl_necessidade').insert({
+      const [resultado] = await connection('tbl_necessidade').insert({
         descricao,
         situacao: "Não Atendida",
         identificador,
@@ -211,8 +211,12 @@ module.exports = {
 
       })
 
-        console.log("Necessidade Cadastrada com Sucesso")
+      if(resultado){
+        console.log(descricao , "Necessidade Cadastrada com Sucesso")
         return response.json({ identificador })
+      }
+
+
 
     } catch ( error) {
       console.log(error, "Erro no cadastro")
