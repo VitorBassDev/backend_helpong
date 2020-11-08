@@ -2,7 +2,7 @@ const express = require ('express');
 const router = express.Router();
 
 /**
- * END POINT - NECESSIDADE CONTROLLER 
+ * END POINTs - NECESSIDADE CONTROLLER 
  */ 
 
 const NecessidadeController = require('../controllers/NecessidadeController');
@@ -18,13 +18,15 @@ router.delete('/deletaNecessidade/:id', NecessidadeController.deletaNecessidade)
 //router.get('/necessidadeOng', ProfileController.necessidadeOng);
 
 const NecessidadeControllerTest = require('../controllersTest/NecessidadeControllerTest');
-router.get('/resumo',                  NecessidadeControllerTest.resumo);
+router.get('/resumo',                   NecessidadeControllerTest.resumo);
 router.get('/resumo2',                  NecessidadeControllerTest.listaPaginaInicial);
 router.post('/registraNecessidadetest', NecessidadeControllerTest.registraNecessidade);
 router.delete('/deletaNecessidadeTest/:id', NecessidadeControllerTest.deletaNecessidade);
-router.get('/necessidadeOngTest',        NecessidadeControllerTest.necessidadePorOng);
-router.get('/necessidadeOngTestv2',        NecessidadeControllerTest.necessidadePorOngv2);
-router.get('/buscaId/:id',        NecessidadeControllerTest.BuscaPorID);
-router.put('/alterar',        NecessidadeControllerTest.editaNecessidade);
+router.get('/necessidadeOngTest',       NecessidadeControllerTest.necessidadePorOng);
+router.get('/necessidadeOngTestv2',     NecessidadeControllerTest.necessidadePorOngv2);
+router.get('/necessidadeAtendida',      NecessidadeControllerTest.necessidadeAtendida);
+router.get('/necessidadeNaoAtendida',      NecessidadeControllerTest.necessidadeNaoAtendida);
+router.get('/buscaId/:id',              NecessidadeControllerTest.BuscaPorID);
+router.put('/alterar',                  NecessidadeControllerTest.editaNecessidade);
 
 module.exports = router;

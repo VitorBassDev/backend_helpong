@@ -84,21 +84,33 @@ module.exports = {
     const usuario_id = request.headers.authorization;
 
     try {
-      const necessidade = await connection('tbl_necessidade')
-      .where('usuario', usuario_id)
-      .select('*');
+    
+      const resumo = await connection('tbl_necessidade')
+      .innerJoin('tbl_endereco',  'tbl_endereco.id_endereco', '=', 'tbl_necessidade.endereco')
+      .innerJoin('tbl_contato' ,  'tbl_contato.id_contato',   '=', 'tbl_necessidade.contato')
 
-      return response.json(necessidade);
-      
+      .where('usuario', usuario_id)       
+      .select([
+        'tbl_necessidade.id_necessidade', 
+        'tbl_necessidade.descricao', 
+        'tbl_necessidade.situacao',
+        'tbl_necessidade.identificador', 
+        'tbl_endereco.cidade',
+        'tbl_endereco.bairro',
+        'tbl_endereco.logadouro',
+        'tbl_contato.ddd',
+        'tbl_contato.numero',
+      ])
+
+        return response.json(resumo);
+
     } catch (error) {
-      console.log(error, "Erro na busca")
-      return response.json({
-        Mensagem: "Erro na busca"
+        console.log(error, "Parametros não encontrados")
+        return response.json({
+          Mensagem: "Parametros não encontrados"
       })
     }
-    
   },
-
   async registraNecessidade (request, response) {
     const {
       descricao,
