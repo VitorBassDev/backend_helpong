@@ -22,5 +22,6 @@ router.post('/registraNecessidadetest', NecessidadeControllerTest.registraNecess
 router.delete('/deletaNecessidadeTest/:id', NecessidadeControllerTest.deletaNecessidade);
 router.get('/necessidadeOngTest',        NecessidadeControllerTest.necessidadePorOng);
 router.get('/buscaId/:id',        NecessidadeControllerTest.BuscaPorID);
+router.put('/alterar',        NecessidadeControllerTest.editaNecessidade);
 
 module.exports = router;

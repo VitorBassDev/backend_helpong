@@ -199,4 +199,35 @@ module.exports = {
     }
   },
 
+  async editaNecessidade (request, response){
+    const {
+      descricao,
+    } = request.body
+
+    //const {id} = request.params;
+    const usuario_id = request.headers.authorization;
+
+    
+    const identificador = 21
+    
+    const novovalor = descricao
+  
+    try {
+      
+    await connection('tbl_necessidade')
+    .where('id_necessidade', identificador)
+    .update('descricao', novovalor);
+
+      console.log("Alteração de necessidade")
+      return response.json({MEnsagem: "agora FOi"})
+  
+    } catch (error) {
+      console.log(error, "Parametros não encontrados")
+      
+      return response.json({
+        Mensagem: "Parametros não encontrados"
+      })
+
+    }
+  },
 }
