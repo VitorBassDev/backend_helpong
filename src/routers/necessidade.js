@@ -18,6 +18,7 @@ router.delete('/deletaNecessidade/:id', NecessidadeController.deletaNecessidade)
 const NecessidadeControllerTest = require('../controllersTest/NecessidadeControllerTest');
 router.get('/resumoDoacao',                  NecessidadeControllerTest.necessidadeDoacao);
 router.get('/resumo',                  NecessidadeControllerTest.resumo);
+router.get('/resumo2',                  NecessidadeControllerTest.resumo2);
 router.post('/registraNecessidadetest', NecessidadeControllerTest.registraNecessidade);
 router.delete('/deletaNecessidadeTest/:id', NecessidadeControllerTest.deletaNecessidade);
 router.get('/necessidadeOngTest',        NecessidadeControllerTest.necessidadePorOng);

@@ -52,6 +52,39 @@ module.exports = {
   },
 
 
+  async resumo2 (request, response){
+
+    try {
+    
+      const resumo = await connection('tbl_necessidade')
+      .innerJoin('tbl_endereco',  'tbl_endereco.id_endereco', '=', 'tbl_necessidade.endereco')
+      .innerJoin('tbl_contato' ,  'tbl_contato.id_contato',   '=', 'tbl_necessidade.contato')
+      .innerJoin('tbl_usuario' ,  'tbl_usuario.id_usuario',   '=', 'tbl_necessidade.usuario')
+                     
+      .select([
+        'tbl_necessidade.id_necessidade', 
+        'tbl_necessidade.descricao', 
+        'tbl_endereco.cidade',
+        'tbl_contato.numero',
+        'tbl_usuario.nome',
+        'tbl_usuario.email',
+        'tbl_usuario.identificador',
+        //'tbl_usuario.nome'
+      ])
+
+      return response.json(resumo);
+
+    } catch (error) {
+      console.log(error, "Parametros não encontrados")
+      
+      return response.json({
+        Mensagem: "Parametros não encontrados"
+      })
+
+    }
+  },
+
+
   async necessidadeDoacao (request, response){
 
     try {
@@ -230,4 +263,39 @@ module.exports = {
 
     }
   },
+
+  async editaNecessidadeCompleta (request, response){
+    const {
+      descricao,
+    } = request.body
+
+    //const {id} = request.params;
+    const usuario_id = request.headers.authorization;
+
+    
+    const identificador = 21
+    
+    const novovalor = descricao
+  
+    try {
+      
+    await connection('tbl_necessidade')
+    .where('id_necessidade', identificador)
+    .update('descricao', novovalor);
+
+      console.log("Alteração de necessidade")
+      return response.json({MEnsagem: "agora FOi"})
+  
+    } catch (error) {
+      console.log(error, "Parametros não encontrados")
+      
+      return response.json({
+        Mensagem: "Parametros não encontrados"
+      })
+
+    }
+  },
+
+
+
 }
