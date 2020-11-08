@@ -9,6 +9,7 @@ const UsuarioController = require('../controllers/UsuarioController');
 router.get('/usuario-all', UsuarioController.listarUsuario);
 router.post('/usuario-ong', UsuarioController.criarOng);
 router.post('/usuario-doador', UsuarioController.criarDoador);
+router.post('/usuario-administrador', UsuarioController.criarAdministrador);
 router.patch('/usuarioEditar', UsuarioController.editarUsuario);
 
 

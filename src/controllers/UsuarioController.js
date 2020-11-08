@@ -104,6 +104,46 @@ module.exports = {
   
   },
 
+  async criarAdministrador (request, response) {
+    const {
+      nome,
+      email,
+      senha,
+      cpf,
+    } = request.body
+
+    // CRIPTOGRAFAR SENHA
+    const saltRounds = 10;
+    const senhaCrip = await bcrypt.hash(request.body.senha, saltRounds);
+
+    // GERAR NÚMERO Automático
+    const id_identificador = crypto.randomBytes(2).toString('HEX');
+    const identificador = id_identificador;
+
+    try {     
+      const usuarioId = await connection('tbl_usuario').insert({
+        nome,
+        email,
+        senha: senhaCrip,
+        cpf,
+        identificador,
+        perfil: 3
+      })                
+
+        console.log(nome)
+        return response.json({identificador})
+
+    } catch ( error) {
+
+      console.log(error, "Erro no cadastro da ONG")
+
+      return response.json({
+        Mensagem: "Erro no cadastro da ONG"
+      })
+    }
+  
+  },
+
   async editarUsuario (request, response){
     const {
       nome,

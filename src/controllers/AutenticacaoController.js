@@ -116,6 +116,60 @@ module.exports = {
       }
   },
   /** ------------------------------------------------------------------------------------------- */
+  /** 
+   * DOADOR
+   * LOGIN COM EMAIL E SENHA */
+  async authAdministrador (request, response){
+
+    const {
+      email,
+      senha_usuario
+    } = request.body;
+      
+      try {
+        const usuario = await connection('tbl_usuario')
+        .where('email', email)
+        .whereRaw('perfil = ?', 3)
+        .select('*')
+        .first();
+  
+        if(!usuario){
+          console.log("Ong não encontrada");
+          return response.status(400).json({
+             Error: 'Ong não encontrada'
+          })
+        } else {
+  
+        const match = await bcrypt.compare(senha_usuario, usuario.senha);
+          if(match) {
+            console.log('Granted! Senha Verificada', usuario.nome);
+            const token = jwt.sign({
+              id: usuario.id_usuario
+            }, "segredo", {
+              expiresIn: "1h"
+              });
+              console.log(token)
+                return response.status(200).json({
+                  Mensagem: "Autenticado com Sucesso",
+                  token, usuario
+                });
+
+          } else {
+
+            console.log('Access Denied');
+            return response.status(400).json({
+              error: 'Acesso Negado'
+            })
+          }        
+        }
+      } catch (error) {
+        console.log(error);
+        return response.json({
+          Mensagem: "Erro na Busca - Catch"
+        })
+      }
+  },
+  /** ------------------------------------------------------------------------------------------- */
 
   /** LOGIN COM CPF */
   async loginCpf (request, response){
