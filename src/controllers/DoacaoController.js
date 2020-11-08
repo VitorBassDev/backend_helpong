@@ -32,6 +32,35 @@ module.exports = {
 
     }
   },
+  async desfazerDoacao (request, response) {
+    const {id} = request.params;
+    const usuario_id = request.headers.authorization;
+
+    try{
+      const doacao = await connection('tbl_necessidade')
+      .where('id_necessidade', id)
+      .update('situacao', 'Não Atendida');    
+
+      if(doacao){
+        console.log("Necessidade Alterada")
+        return response.json({
+          Mensagem: "Necessidade Alterada",
+          doacao
+        })
+
+      } else {
+          console.log("Deu Erro")
+      }
+
+    } catch(error){
+
+      console.log(error, "Erro na alteração")
+      return response.json({
+        Mensagem: "Erro na alteração"
+      })
+
+    }
+  },
 
   async NecessidadeJoin (request, response){
     ///const id_necessidade = request.headers.authorization;

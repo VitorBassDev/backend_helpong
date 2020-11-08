@@ -25,10 +25,12 @@ module.exports = {
 
     try {
     
+      const situacao = "Não Atendida"
       const resumo = await connection('tbl_necessidade')
       .innerJoin('tbl_endereco', 'tbl_endereco.id_endereco', '=', 'tbl_necessidade.endereco')
       .innerJoin('tbl_usuario' ,  'tbl_usuario.id_usuario',   '=', 'tbl_necessidade.usuario')
-                     
+      
+      .whereRaw('situacao = ?', situacao)
       .select([
         'tbl_necessidade.id_necessidade', 
         'tbl_necessidade.descricao', 
