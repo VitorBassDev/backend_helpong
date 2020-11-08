@@ -2,7 +2,7 @@ const expres = require('express');
 const connection = require ('../database/connection');
 
 const crypto = require ('crypto');
-const { innerJoin } = require('../database/connection');
+
 
 module.exports = {
 
@@ -27,16 +27,14 @@ module.exports = {
     try {
     
       const resumo = await connection('tbl_necessidade')
-      .innerJoin('tbl_endereco',
-              'tbl_endereco.id_endereco', 
-                  '=', 
-                    'tbl_necessidade.endereco')
+      .innerJoin('tbl_endereco', 'tbl_endereco.id_endereco', '=', 'tbl_necessidade.endereco')
+      .innerJoin('tbl_usuario' ,  'tbl_usuario.id_usuario',   '=', 'tbl_necessidade.usuario')
                      
       .select([
         'tbl_necessidade.id_necessidade', 
         'tbl_necessidade.descricao', 
         'tbl_endereco.cidade',
-        //'tbl_usuario.nome'
+        'tbl_usuario.nome'
       ])
 
       return response.json(resumo);
@@ -52,7 +50,34 @@ module.exports = {
   },
 
 
-  async resumo2 (request, response){
+  async listaPaginaInicial (request, response){
+
+    try {
+    
+      const resumo = await connection('tbl_necessidade')
+      .innerJoin('tbl_endereco', 'tbl_endereco.id_endereco', '=', 'tbl_necessidade.endereco')
+      .innerJoin('tbl_usuario' ,  'tbl_usuario.id_usuario',   '=', 'tbl_necessidade.usuario')
+                     
+      .select([
+        'tbl_necessidade.id_necessidade', 
+        'tbl_necessidade.descricao', 
+        'tbl_endereco.cidade',
+        'tbl_usuario.nome'
+      ])
+
+      return response.json(resumo);
+
+    } catch (error) {
+      console.log(error, "Parametros não encontrados")
+      
+      return response.json({
+        Mensagem: "Parametros não encontrados"
+      })
+
+    }
+  },
+
+  async listaPaginaDoacao (request, response){
 
     try {
     
@@ -64,52 +89,23 @@ module.exports = {
       .select([
         'tbl_necessidade.id_necessidade', 
         'tbl_necessidade.descricao', 
+        'tbl_necessidade.identificador', 
+        'tbl_necessidade.situacao', 
         'tbl_endereco.cidade',
+        'tbl_contato.ddd',
         'tbl_contato.numero',
         'tbl_usuario.nome',
         'tbl_usuario.email',
-        'tbl_usuario.identificador',
-        //'tbl_usuario.nome'
+        'tbl_usuario.identificador as user',
       ])
 
-      return response.json(resumo);
+        return response.json(resumo);
 
     } catch (error) {
-      console.log(error, "Parametros não encontrados")
-      
-      return response.json({
-        Mensagem: "Parametros não encontrados"
+        console.log(error, "Parametros não encontrados")
+        return response.json({
+          Mensagem: "Parametros não encontrados"
       })
-
-    }
-  },
-
-
-  async necessidadeDoacao (request, response){
-
-    try {
-    
-      const resumo = await connection('tbl_necessidade')
-      .join('tbl_usuario',  'tbl_usuario.id_usuario', '=', 'tbl_necessidade.usuario')
-      .select([
-        'tbl_necessidade.id_necessidade', 
-        'tbl_necessidade.descricao', 
-        'tbl_necessidade.situacao', 
-        'tbl_necessidade.identificador', 
-        'tbl_usuario.nome',
-        'tbl_usuario.email',
-        'tbl_usuario.cpf',
-      ])
-
-      return response.json(resumo);
-
-    } catch (error) {
-      console.log(error, "Parametros não encontrados")
-      
-      return response.json({
-        Mensagem: "Parametros não encontrados"
-      })
-
     }
   },
 
@@ -131,6 +127,38 @@ module.exports = {
       })
     }
     
+  },
+
+  async necessidadePorOngv2 (request, response){
+    const usuario_id = request.headers.authorization;
+
+    try {
+    
+      const resumo = await connection('tbl_necessidade')
+      .innerJoin('tbl_endereco',  'tbl_endereco.id_endereco', '=', 'tbl_necessidade.endereco')
+      .innerJoin('tbl_contato' ,  'tbl_contato.id_contato',   '=', 'tbl_necessidade.contato')
+
+      .where('usuario', usuario_id)       
+      .select([
+        'tbl_necessidade.id_necessidade', 
+        'tbl_necessidade.descricao', 
+        'tbl_necessidade.situacao',
+        'tbl_necessidade.identificador', 
+        'tbl_endereco.cidade',
+        'tbl_endereco.bairro',
+        'tbl_endereco.logadouro',
+        'tbl_contato.ddd',
+        'tbl_contato.numero',
+      ])
+
+        return response.json(resumo);
+
+    } catch (error) {
+        console.log(error, "Parametros não encontrados")
+        return response.json({
+          Mensagem: "Parametros não encontrados"
+      })
+    }
   },
 
   async registraNecessidade (request, response) {

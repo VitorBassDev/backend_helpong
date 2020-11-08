@@ -11,6 +11,33 @@ module.exports = {
       const necessidade = await connection('tbl_necessidade').select('*')  
         console.log("Lista de Necessidade")
         return response.json(necessidade);
+        
+    } catch (error) {
+      console.log(error, "Parametros não encontrados")
+      
+      return response.json({
+        Mensagem: "Parametros não encontrados"
+      })
+    }
+  },
+
+  async listaPaginaInicial (request, response){
+
+    try {
+    
+      const resumo = await connection('tbl_necessidade')
+      .innerJoin('tbl_endereco', 'tbl_endereco.id_endereco', '=', 'tbl_necessidade.endereco')
+      .innerJoin('tbl_usuario' ,  'tbl_usuario.id_usuario',   '=', 'tbl_necessidade.usuario')
+                     
+      .select([
+        'tbl_necessidade.id_necessidade', 
+        'tbl_necessidade.descricao', 
+        'tbl_endereco.cidade',
+        'tbl_usuario.nome'
+      ])
+
+      return response.json(resumo);
+
     } catch (error) {
       console.log(error, "Parametros não encontrados")
       
@@ -18,6 +45,38 @@ module.exports = {
         Mensagem: "Parametros não encontrados"
       })
 
+    }
+  },
+
+  async listaPaginaDoacao (request, response){
+
+    try {
+    
+      const resumo = await connection('tbl_necessidade')
+      .innerJoin('tbl_endereco',  'tbl_endereco.id_endereco', '=', 'tbl_necessidade.endereco')
+      .innerJoin('tbl_contato' ,  'tbl_contato.id_contato',   '=', 'tbl_necessidade.contato')
+      .innerJoin('tbl_usuario' ,  'tbl_usuario.id_usuario',   '=', 'tbl_necessidade.usuario')
+                     
+      .select([
+        'tbl_necessidade.id_necessidade', 
+        'tbl_necessidade.descricao', 
+        'tbl_necessidade.identificador', 
+        'tbl_necessidade.situacao', 
+        'tbl_endereco.cidade',
+        'tbl_contato.ddd',
+        'tbl_contato.numero',
+        'tbl_usuario.nome',
+        'tbl_usuario.email',
+        'tbl_usuario.identificador as user',
+      ])
+
+        return response.json(resumo);
+
+    } catch (error) {
+        console.log(error, "Parametros não encontrados")
+        return response.json({
+          Mensagem: "Parametros não encontrados"
+      })
     }
   },
 
@@ -39,6 +98,7 @@ module.exports = {
     }
     
   },
+
   async registraNecessidade (request, response) {
     const {
       descricao,
