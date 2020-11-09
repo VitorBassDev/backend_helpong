@@ -206,4 +206,35 @@ module.exports = {
 
     }
   },
+
+  async deletaUsuario(request, response) {
+    const {id} = request.params;
+    const usuario_id = request.headers.authorization;
+
+    try {
+      const necessidade = await connection('tbl_usuario')
+      .where('id_usuario', id)
+      .select('id_usuario')
+      .first();
+  
+      const resposta = await connection('tbl_usuario').where('id_usuario', id).delete();
+  
+      if(resposta){
+        console.log(`Usuário ${id} deletado com sucesso`);
+        return response.status(204).json({
+          Mensagem:`Usuário ${id} deletado com sucesso`
+        });      
+  
+      } else{
+        return response.status(401).json({
+          error: "Erro ao deletar"
+        })
+      }
+    } catch (error) {
+      console.log(error)
+      return response.status(401).json({
+        error: "Algo deu errado"
+      })
+    }   
+  },
 }

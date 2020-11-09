@@ -20,6 +20,7 @@ router.patch('/usuarioEditarTest', UsuarioControllerTest.editarUsuario);
 router.patch('/usuarioEditarTestNovo', UsuarioControllerTest.editarUsuarioNovo);
 router.patch('/usuarioEditarTest', UsuarioControllerTest.editarUsuario);
 router.post('/usuarioUnicoTest', UsuarioControllerTest.buscarUsuario);
+router.delete('/deletaUsuarioTest/:id', UsuarioControllerTest.deletaUsuario);
 
 
 

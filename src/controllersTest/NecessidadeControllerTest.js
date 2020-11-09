@@ -78,6 +78,46 @@ module.exports = {
     }
   },
 
+  async listaTotalAtendida (request, response){
+
+    try {
+      const situacao = "Atendida"
+      const resumo = await connection('tbl_necessidade').count()      
+      .whereRaw('situacao = ?', situacao)
+      
+      return response.json(resumo);
+
+    } catch (error) {
+      console.log(error, "Parametros não encontrados")
+      
+      return response.json({
+        Mensagem: "Parametros não encontrados"
+      })
+
+    }
+  },
+
+  async listaTotalNaoAtendida (request, response){
+
+    try {
+      const situacao = "Não Atendida"
+      const resumo = await connection('tbl_necessidade').count()      
+      .whereRaw('situacao = ?', situacao)
+      
+      console.log(resumo)
+      return response.json(resumo.count);
+
+    } catch (error) {
+      console.log(error, "Parametros não encontrados")
+      
+      return response.json({
+        Mensagem: "Parametros não encontrados"
+      })
+
+    }
+  },
+
+
   async listaPaginaDoacao (request, response){
 
     try {

@@ -25,6 +25,8 @@ router.delete('/deletaNecessidadeTest/:id', NecessidadeControllerTest.deletaNece
 router.get('/necessidadeOngTest',       NecessidadeControllerTest.necessidadePorOng);
 router.get('/necessidadeOngTestv2',     NecessidadeControllerTest.necessidadePorOngv2);
 router.get('/necessidadeAtendida',      NecessidadeControllerTest.necessidadeAtendida);
+router.get('/totalAtendida',            NecessidadeControllerTest.listaTotalAtendida);
+router.get('/totalNaoAtendida',            NecessidadeControllerTest.listaTotalNaoAtendida);
 router.get('/necessidadeNaoAtendida',      NecessidadeControllerTest.necessidadeNaoAtendida);
 router.get('/buscaId/:id',              NecessidadeControllerTest.BuscaPorID);
 router.put('/alterar',                  NecessidadeControllerTest.editaNecessidade);
