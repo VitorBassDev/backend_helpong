@@ -212,10 +212,7 @@ module.exports = {
     const usuario_id = request.headers.authorization;
 
     try {
-      const necessidade = await connection('tbl_usuario')
-      .where('id_usuario', id)
-      .select('id_usuario')
-      .first();
+  
   
       const resposta = await connection('tbl_usuario').where('id_usuario', id).delete();
   

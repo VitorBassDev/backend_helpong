@@ -11,6 +11,7 @@ router.post('/usuario-ong', UsuarioController.criarOng);
 router.post('/usuario-doador', UsuarioController.criarDoador);
 router.post('/usuario-administrador', UsuarioController.criarAdministrador);
 router.patch('/usuarioEditar', UsuarioController.editarUsuario);
+router.delete('/deletaUsuario/:id', UsuarioController.deletaUsuario);
 
 
 const UsuarioControllerTest = require('../controllersTest/userControllerTest');
