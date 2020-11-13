@@ -165,8 +165,6 @@ module.exports = {
       console.log("Alteração de usuário")
       return response.json(resultado)
     
-
-
     } catch (error) {
       console.log(error, "Parametros não encontrados")
       

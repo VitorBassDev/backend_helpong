@@ -385,7 +385,7 @@ module.exports = {
     const usuario_id = request.headers.authorization;
 
     
-    const identificador = 21
+    const identificador = 33
     
     const novovalor = descricao
   
@@ -395,7 +395,7 @@ module.exports = {
     .where('id_necessidade', identificador)
     .update('descricao', novovalor);
 
-      console.log("Alteração de necessidade")
+      console.log("Alteração de necessidade realizada com sucesso")
       return response.json({MEnsagem: "agora FOi"})
   
     } catch (error) {
