@@ -50,7 +50,10 @@ module.exports = {
         perfil: 1
       })                
 
-        console.log(nome)
+        console.log({
+          Mensagem: "Usuário Criado com Sucesso", 
+          Nome: nome
+        })
         return response.json({email})
 
     } catch ( error) {
