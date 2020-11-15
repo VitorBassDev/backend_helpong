@@ -129,7 +129,7 @@ module.exports = {
       try {
         const usuario = await connection('tbl_usuario')
         .where('email', email)
-        .whereRaw('perfil = ?', 3)
+        .whereRaw('perfil = ?', 2)
         .select('*')
         .first();
   

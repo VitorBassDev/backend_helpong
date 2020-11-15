@@ -31,7 +31,4 @@ router.get('/necessidadeNaoAtendida',      NecessidadeControllerTest.necessidade
 router.get('/buscaId/:id',              NecessidadeControllerTest.BuscaPorID);
 router.put('/alterar',                  NecessidadeControllerTest.editaNecessidade);
 
-
-router.get('/listaPaginaDoacao02',        NecessidadeControllerTest.listaPaginaDoacao);
-
 module.exports = router;
