@@ -34,6 +34,7 @@ module.exports = {
       .select([
         'tbl_necessidade.id_necessidade', 
         'tbl_necessidade.descricao', 
+        'tbl_necessidade.identificador', 
         'tbl_endereco.cidade',
         'tbl_usuario.nome'
       ])
