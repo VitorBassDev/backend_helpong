@@ -54,7 +54,7 @@ module.exports = {
   async listaPaginaDoacao (request, response){
 
     try {
-      const necessidade = 4
+      const necessidade = 5
       const resumo = await connection('tbl_necessidade')
       .innerJoin('tbl_endereco',  'tbl_endereco.id_endereco', '=', 'tbl_necessidade.endereco')
       .innerJoin('tbl_contato' ,  'tbl_contato.id_contato',   '=', 'tbl_necessidade.contato')

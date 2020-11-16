@@ -149,14 +149,14 @@ module.exports = {
       email,
       cpf,
     } = request.body
-
+const idUser = 32
     //const {id} = request.params;
     const usuario_id = request.headers.authorization;
 
     try {
 
     const resultado = await connection('tbl_usuario')
-    .where('id_usuario', usuario_id)
+    .where('id_usuario', idUser)
     .update({
       'email': email,
       'nome':nome,
