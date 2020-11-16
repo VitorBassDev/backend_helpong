@@ -90,7 +90,7 @@ module.exports = {
         senha: senhaCrip,
         cpf,
         identificador,
-        perfil: 2
+        perfil: 4
       })                
 
         console.log(nome)
@@ -130,7 +130,7 @@ module.exports = {
         senha: senhaCrip,
         cpf,
         identificador,
-        perfil: 3
+        perfil: 2
       })                
 
         console.log(nome)
@@ -138,10 +138,10 @@ module.exports = {
 
     } catch ( error) {
 
-      console.log(error, "Erro no cadastro da ONG")
+      console.log(error, "Erro no cadastro de Administrador")
 
       return response.json({
-        Mensagem: "Erro no cadastro da ONG"
+        Mensagem: "Erro no cadastro de Administrador"
       })
     }
   
